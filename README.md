@@ -32,9 +32,7 @@ conda install -c bioconda pysam
 ```sh
 
 # download FuSeq_WES_v1.0.0
-wget FuSeq_WES_v1.0.0
 wget https://github.com/nghiavtr/FuSeq_WES/releases/download/v1.0.0/FuSeq_WES_v1.0.0.tar.gz -O FuSeq_WES_v1.0.0.tar.gz
-
 tar -xzvf FuSeq_WES_v1.0.0.tar.gz
 
 #configure FuSeq_WES
@@ -65,6 +63,9 @@ fusiondbFn="FuSeq_WES_v1.0.0/Data/Mitelman_fusiondb.RData"
 paralogdb="FuSeq_WES_v1.0.0/Data/ensmbl_paralogs_grch37.RData"
 Rscript FuSeq_WES_v1.0.0/process_fuseq_wes.R in=$output_dir sqlite=$gtfSqlite fusiondb=$fusiondbFn paralogdb=$paralogdbFn out=$output_dir
 
+# Fusion genes discovered by FuSeq_WES are stored in a file named FuSeq_WES_FusionFinal.txt
+# the other information of split reads and mapped reads are also founded in the output folder
+
 ```
 
 ## Building reference
@@ -76,7 +77,7 @@ Users should select right annotation version (hg19/hg38) and parameters (read le
 ```sh
 
 # download FuSeq_WES_v1.0.0
-wget FuSeq_WES_v1.0.0
+wget https://github.com/nghiavtr/FuSeq_WES/releases/download/v1.0.0/FuSeq_WES_v1.0.0.tar.gz -O FuSeq_WES_v1.0.0.tar.gz
 tar -xzvf FuSeq_WES_v1.0.0.tar.gz
 
 #configure FuSeq_WES
