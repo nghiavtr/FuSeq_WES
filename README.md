@@ -1,6 +1,9 @@
 
 # FuSeq_WES: a Fusion Detection method from DNA sequencing data
 
+This tool is developed based on [FuSeq](https://github.com/nghiavtr/FuSeq), the method for detecting fusion genes from RNA-seq data. Many functions and parameters of FuSeq_WES are inherited from FuSeq. More details about FuSeq_WES can be found in [its article](https://www.frontiersin.org/article/10.3389/fgene.2022.820493).
+
+
 ## Installation Requirements
 
 	- Python3
@@ -68,11 +71,10 @@ Rscript FuSeq_WES_v1.0.0/process_fuseq_wes.R in=$output_dir sqlite=$gtfSqlite fu
 
 ```
 
-## Building reference
-This section shows example of generating reference files (the json file and the sqlite file) for running fuseq_wes.
+## Building references for FuSeq_WES
+This section shows an example of generating reference files (the json file and the sqlite file) for running fuseq_wes.
 Users should select right annotation version (hg19/hg38) and parameters (read length of bam files, default=100).
 
-#### 1. Extract gtf from annotation
 
 ```sh
 
