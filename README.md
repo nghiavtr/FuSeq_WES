@@ -73,8 +73,9 @@ Rscript FuSeq_WES_v1.0.0/process_fuseq_wes.R in=$output_dir sqlite=$gtfSqlite fu
 
 ## Building references for FuSeq_WES
 This section shows an example of generating reference files (the json file and the sqlite file) for running fuseq_wes.
-Users should select right annotation version (hg19/hg38) and parameters (read length of bam files, default=100).
+Users should select the right annotation version (hg19/hg38) and parameters (for example, the read length of bam files, default=100).
 
+We also provide several pre-built references for FuSeq_WES that can be downloaded here: [Hg19 references](https://www.meb.ki.se/sites/biostatwiki/wp-content/uploads/sites/4/2022/04/UCSC_hg19_wes_contigSize3000_bigLen130000_r100.tar.gz) and [Hg38 references](https://www.meb.ki.se/sites/biostatwiki/wp-content/uploads/sites/4/2022/04/UCSC_hg38_wes_contigSize3000_bigLen130000_r100.tar.gz).
 
 ```sh
 
