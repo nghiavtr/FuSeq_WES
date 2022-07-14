@@ -120,6 +120,47 @@ python3 FuSeq_WES_v1.0.0/gtf_to_json.py --gtf $gtfoutFn --output $json
 
 ``` 
 
+#### Building the database of paralogs for FuSeq_WES
+Information of paralogs is added to the output of FuSeq_WES, however this information is not used for filtering. Here, we show an example of scripts to get the data of paralogs for Hg38. Prebuilt data for paralog database of hg38 can be found in folder Data: https://github.com/nghiavtr/FuSeq_WES/tree/main/Data
+
+1. Download gtf file from ensembl annotation database, create a sqlite file
+``` 
+#run in linux command line
+wget http://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz
+gunzip Homo_sapiens.GRCh38.95.gtf.gz
+Rscript FuSeq_WES_v1.0.0/createSqlite.R Homo_sapiens.GRCh38.95.gtf Homo_sapiens.GRCh38.95.sqlite
+``` 
+
+2. Extract paralog information and save to file
+``` 
+library(GenomicFeatures)
+gtfSqlite=("Homo_sapiens.GRCh38.95.sqlite")
+anntxdb <- loadDb(gtfSqlite)
+allGenes=genes(anntxdb)
+allGenes_name=names(allGenes)
+
+library(biomaRt)
+#remove version in the gene name before querying
+ensembl = useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl",version = 95) #GRCh=38
+
+att_meta=attributes(ensembl)
+att_all=att_meta$attributes
+head(att_all)
+
+attList=c('ensembl_gene_id',"external_gene_name","hsapiens_paralog_ensembl_gene","hsapiens_paralog_associated_gene_name","hsapiens_paralog_orthology_type")
+paralogs <- getBM(attributes=attList, filters = 'ensembl_gene_id', values = allGenes_name, mart = ensembl)
+
+#rename the columnn
+p=which(att_all$name %in% attList & att_all$page=="homologs")
+newName=att_all$description[p]
+newName=gsub(" ",".",newName)
+colnames(paralogs)=newName
+
+save(paralogs, file="ensmbl_paralogs_grch38.RData")
+
+``` 
+
+
 ## References
 1. Deng, Wenjiang, Sarath Murugan, Johan Lindberg, Venkatesh Chellappa, Xia Shen, Yudi Pawitan, and Trung Nghia Vu. 2022. “Fusion Gene Detection Using Whole-Exome Sequencing Data in Cancer Patients.” Frontiers in Genetics 13. https://www.frontiersin.org/article/10.3389/fgene.2022.820493.
 
