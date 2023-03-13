@@ -10,8 +10,10 @@ processFEQ <-function(inPath,anntxdb,readStrands="UN",chromRef=as.character(c(1:
   
   #process Anti strand transcripts 
   asIDs = which(grepl("-AS1", feqRaw$Transcript) == TRUE)
-  asTranscripts = feqRaw[asIDs, ]
-  feqRaw = feqRaw[-asIDs, ]
+  if (length(asIDs) > 0) {
+    asTranscripts = feqRaw[asIDs, ]
+    feqRaw = feqRaw[-asIDs, ]
+  }
   
   #generate feq
   res=feqRaw[,c(2,4)]
