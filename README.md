@@ -33,7 +33,13 @@ conda install -c bioconda pysam
 
 ```sh
 # download FuSeq_WES
-git clone https://github.com/nghiavtr/FuSeq_WES
+# If use FuSeq_WES_v1.0.0
+wget https://github.com/nghiavtr/FuSeq_WES/releases/download/v1.0.0/FuSeq_WES_v1.0.0.tar.gz -O FuSeq_WES_v1.0.0.tar.gz
+tar -xzvf FuSeq_WES_v1.0.0.tar.gz
+mv FuSeq_WES_v1.0.0 FuSeq_WES
+
+## If use the developing version from GitHub
+#git clone https://github.com/nghiavtr/FuSeq_WES
 
 #configure FuSeq_WES
 cd FuSeq_WES
@@ -80,7 +86,13 @@ We also provide several pre-built references for FuSeq_WES that can be downloade
 
 ```sh
 # download FuSeq_WES
-git clone https://github.com/nghiavtr/FuSeq_WES
+# If use FuSeq_WES_v1.0.0
+wget https://github.com/nghiavtr/FuSeq_WES/releases/download/v1.0.0/FuSeq_WES_v1.0.0.tar.gz -O FuSeq_WES_v1.0.0.tar.gz
+tar -xzvf FuSeq_WES_v1.0.0.tar.gz
+mv FuSeq_WES_v1.0.0 FuSeq_WES
+
+## If use the developing version from GitHub
+#git clone https://github.com/nghiavtr/FuSeq_WES
 
 #configure FuSeq_WES
 cd FuSeq_WES
