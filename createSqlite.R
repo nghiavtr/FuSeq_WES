@@ -8,6 +8,6 @@ gtfSqliteFn=args[2];
 library(GenomicFeatures);
 gtfTxdb <- makeTxDbFromGFF(file=gtfFile,
                  format="gtf",
-                 dataSource=paste("Link to the source",sep=""),
+                 dataSource=gtfFile,
                  organism="Homo sapiens")
 saveDb(gtfTxdb,file=gtfSqliteFn)
