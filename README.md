@@ -1,15 +1,14 @@
-
 # FuSeq_WES: a Fusion Detection method from DNA sequencing data
 
 This tool is developed based on [FuSeq](https://github.com/nghiavtr/FuSeq), the method for detecting fusion genes from RNA-seq data. Many functions and parameters of FuSeq_WES are inherited from FuSeq. More details about FuSeq_WES can be found in [its article](https://www.frontiersin.org/article/10.3389/fgene.2022.820493).
 
-
 ## Installation Requirements
 
+	- Git
 	- Python3
 	- pysam 
 	- R (v3.6 or later) 
-	- R packages - GenomeFeatures, Biostrings
+	- R packages - GenomicFeatures, biomaRt, Biostrings
 
 ## How to Install
 
@@ -33,23 +32,26 @@ conda install -c bioconda pysam
 ## Quick start to run FuSeq-WES
 
 ```sh
-
-# download FuSeq_WES_v1.0.0
-wget https://github.com/nghiavtr/FuSeq_WES/releases/download/v1.0.0/FuSeq_WES_v1.0.0.tar.gz -O FuSeq_WES_v1.0.0.tar.gz
-tar -xzvf FuSeq_WES_v1.0.0.tar.gz
+# download FuSeq_WES
+git clone https://github.com/nghiavtr/FuSeq_WES
 
 #configure FuSeq_WES
-cd FuSeq_WES_v1.0.0
+cd FuSeq_WES
 bash configure.sh
 cd ..
 
 # download test data
 wget https://www.meb.ki.se/sites/biostatwiki/wp-content/uploads/sites/4/2022/04/FuSeq_WES_testdata.tar.gz
 tar -xzvf FuSeq_WES_testdata.tar.gz
+rm FuSeq_WES_testdata.tar.gz
 
-# download reference 
+# download references
 wget https://www.meb.ki.se/sites/biostatwiki/wp-content/uploads/sites/4/2022/04/UCSC_hg19_wes_contigSize3000_bigLen130000_r100.tar.gz
 tar -xzvf UCSC_hg19_wes_contigSize3000_bigLen130000_r100.tar.gz
+rm UCSC_hg19_wes_contigSize3000_bigLen130000_r100.tar.gz
+wget https://www.meb.ki.se/sites/biostatwiki/wp-content/uploads/sites/4/2022/04/UCSC_hg38_wes_contigSize3000_bigLen130000_r100.tar.gz
+tar -xzvf UCSC_hg38_wes_contigSize3000_bigLen130000_r100.tar.gz
+rm UCSC_hg38_wes_contigSize3000_bigLen130000_r100.tar.gz
 
 bamfile="FuSeq_WES_testdata/test.bam"
 ref_json="UCSC_hg19_wes_contigSize3000_bigLen130000_r100/UCSC_hg19_wes_contigSize3000_bigLen130000_r100.json"
@@ -59,16 +61,15 @@ output_dir="test_out"
 mkdir $output_dir
 
 #extract mapped reads and split reads
-python3 FuSeq_WES_v1.0.0/fuseq_wes.py --bam $bamfile  --gtf $ref_json --mapq-filter --outdir $output_dir
+python3 FuSeq_WES/fuseq_wes.py --bam $bamfile  --gtf $ref_json --mapq-filter --outdir $output_dir
 
 #process the reads
-fusiondbFn="FuSeq_WES_v1.0.0/Data/Mitelman_fusiondb.RData"
-paralogdb="FuSeq_WES_v1.0.0/Data/ensmbl_paralogs_grch37.RData"
-Rscript FuSeq_WES_v1.0.0/process_fuseq_wes.R in=$output_dir sqlite=$gtfSqlite fusiondb=$fusiondbFn paralogdb=$paralogdbFn out=$output_dir
+fusiondbFn="FuSeq_WES/Data/Mitelman_fusiondb.RData"
+paralogdbFn="FuSeq_WES/Data/ensmbl_paralogs_grch37.RData"
+Rscript FuSeq_WES/process_fuseq_wes.R in=$output_dir sqlite=$gtfSqlite fusiondb=$fusiondbFn paralogdb=$paralogdbFn out=$output_dir
 
 # Fusion genes discovered by FuSeq_WES are stored in a file named FuSeq_WES_FusionFinal.txt
 # the other information of split reads and mapped reads are also founded in the output folder
-
 ```
 
 ## Building references for FuSeq_WES
@@ -78,13 +79,11 @@ Users should select the right annotation version (hg19/hg38) and parameters (for
 We also provide several pre-built references for FuSeq_WES that can be downloaded here: [Hg19 references](https://www.meb.ki.se/sites/biostatwiki/wp-content/uploads/sites/4/2022/04/UCSC_hg19_wes_contigSize3000_bigLen130000_r100.tar.gz) and [Hg38 references](https://www.meb.ki.se/sites/biostatwiki/wp-content/uploads/sites/4/2022/04/UCSC_hg38_wes_contigSize3000_bigLen130000_r100.tar.gz).
 
 ```sh
-
-# download FuSeq_WES_v1.0.0
-wget https://github.com/nghiavtr/FuSeq_WES/releases/download/v1.0.0/FuSeq_WES_v1.0.0.tar.gz -O FuSeq_WES_v1.0.0.tar.gz
-tar -xzvf FuSeq_WES_v1.0.0.tar.gz
+# download FuSeq_WES
+git clone https://github.com/nghiavtr/FuSeq_WES
 
 #configure FuSeq_WES
-cd FuSeq_WES_v1.0.0
+cd FuSeq_WES
 bash configure.sh
 cd ..
 
@@ -95,29 +94,27 @@ wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.refGene.
 gunzip hg38.fa.gz
 gunzip hg38.refGene.gtf.gz
 
-
-fusiondbFn="FuSeq_WES_v1.0.0/Data/Mitelman_fusiondb.RData"
+fusiondbFn="FuSeq_WES/Data/Mitelman_fusiondb.RData"
 transcriptGtfSqlite="hg38.refGene.sqlite"
 genomeFastaFile="hg38.fa"
 
 #create sqlite file for the transcriptome
-Rscript FuSeq_WES_v1.0.0/createSqlite.R hg38.refGene.gtf $transcriptGtfSqlite
+Rscript FuSeq_WES/createSqlite.R hg38.refGene.gtf $transcriptGtfSqlite
 
 #create gtf file for all genes
 readLen=100 #suppose the bam files have read length of 100bp. The the results can be slightly different if using this reference for input data with different read length.
 gtfoutFn="UCSC_hg38_wes_r100.gtf"
-Rscript FuSeq_WES_v1.0.0/extract_gtf.R genomefasta=$genomeFastaFile sqlite=$transcriptGtfSqlite fusiondb=$fusiondbFn readLen=$readLen out=$gtfoutFn
+Rscript FuSeq_WES/extract_gtf.R genomefasta=$genomeFastaFile sqlite=$transcriptGtfSqlite fusiondb=$fusiondbFn readLen=$readLen out=$gtfoutFn
 
 ### now generate references for FuSeq_WES
 json="UCSC_hg38_wes_r100.json"
 gtfSqliteOut="UCSC_hg38_wes_r100.sqlite"
 
 #create sqlite file for the reference of FuSeq_WES
-Rscript FuSeq_WES_v1.0.0/createSqlite.R $gtfoutFn $gtfSqliteOut
+Rscript FuSeq_WES/createSqlite.R $gtfoutFn $gtfSqliteOut
 
 #create JSON file for the reference of FuSeq_WES
-python3 FuSeq_WES_v1.0.0/gtf_to_json.py --gtf $gtfoutFn --output $json
-
+python3 FuSeq_WES/gtf_to_json.py --gtf $gtfoutFn --output $json
 ``` 
 
 #### Building the database of paralogs for FuSeq_WES
@@ -128,7 +125,7 @@ Information of paralogs is added to the output of FuSeq_WES, however this inform
 #run in linux command line
 wget http://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz
 gunzip Homo_sapiens.GRCh38.95.gtf.gz
-Rscript FuSeq_WES_v1.0.0/createSqlite.R Homo_sapiens.GRCh38.95.gtf Homo_sapiens.GRCh38.95.sqlite
+Rscript FuSeq_WES/createSqlite.R Homo_sapiens.GRCh38.95.gtf Homo_sapiens.GRCh38.95.sqlite
 ``` 
 
 2. Extract paralog information and save to file
@@ -157,10 +154,7 @@ newName=gsub(" ",".",newName)
 colnames(paralogs)=newName
 
 save(paralogs, file="ensmbl_paralogs_grch38.RData")
-
 ``` 
-
 
 ## References
 1. Deng, Wenjiang, Sarath Murugan, Johan Lindberg, Venkatesh Chellappa, Xia Shen, Yudi Pawitan, and Trung Nghia Vu. 2022. “Fusion Gene Detection Using Whole-Exome Sequencing Data in Cancer Patients.” Frontiers in Genetics 13. https://www.frontiersin.org/article/10.3389/fgene.2022.820493.
-
